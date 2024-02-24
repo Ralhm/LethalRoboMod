@@ -64,9 +64,14 @@ namespace RobotMod.Robot
             item = new Item();
         }
 
-        enum CommandType
+        public enum CommandType
         {
             Follow, ReturnToShip, Attack, FindScrap
+        }
+
+        public void ReceiveCommand(CommandType command)
+        {
+
         }
 
         public void GetHoldItem()
@@ -74,10 +79,7 @@ namespace RobotMod.Robot
 
         }
 
-        public void ReceiveCommand()
-        {
 
-        }
 
         public void AttackBehavior()
         {
