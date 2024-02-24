@@ -27,7 +27,9 @@ using UnityEngine.AI;
 
 //Hurdles:
 //The terminals list of buyable items is an array of Items. An Array. Not a list. This could make adding the robot to it difficult
-//In order to make the robot purchasable by the terminal, we'll need to give it an Item variable. This could complicate things
+//In order to make the robot purchasable by the terminal, we'll need to give it an Item variable. This could complicate things (maybe. Need to look into it more)
+//Networking. IDK how it works on unity and we may have to figure shit out for how Lethal Company makes it work. 
+//We could probably reverse engineer what's there and hopefuly copy/paste what's there into our thing.
 
 
 namespace RobotMod.Robot
