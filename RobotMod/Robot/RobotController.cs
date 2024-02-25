@@ -24,6 +24,19 @@ using UnityEngine.AI;
 //The Item class is a scriptable object. basically all grabbable items like scrap and flashlights have a Public Item variable
 //We'll probably need to make a patch for the terminal to add the robot as a purchasable item
 
+//Useful PlayerController Functions
+//SetDestinationToPosition and SetMovingTowardsTargetPlayerin EnemyAI should be useful references
+//SetDestinationToPosition just calls the current target players position
+//DiscardHeldObject
+//isHoldingObjecy
+//BeginGrabObject (In order for this to work, we'll need to make the robot look at the object to be grabbed, or refactor the function)
+//PlaceGrabbableObject
+//Grabbable Object has isInShipRoom variable
+
+
+//Networkign notes
+//UpdatePlayerPositionServerRpc UpdatePlayerPositionClientRpc in PlayerControllerB will be usful probably
+
 
 //Hurdles:
 //The terminals list of buyable items is an array of Items. An Array. Not a list. This could make adding the robot to it difficult
@@ -36,6 +49,21 @@ namespace RobotMod.Robot
 {
     internal class RobotController : PlayerControllerB
     {
+
+        float CheckRadius = 40.0f;
+
+        private Collider[] NearScrapColliders;
+
+        public enum CommandType
+        {
+            Follow, ReturnToShip, Attack, FindScrap, Idle
+        }
+
+        private float setDestinationToPlayerInterval;
+
+        private RoundManager roundManager;
+
+        public CommandType CurrentState;
 
         public PlayerControllerB targetPlayer;
 
@@ -62,42 +90,127 @@ namespace RobotMod.Robot
         void Awake()
         {
             item = new Item();
+            CommandType type = CommandType.Follow;
         }
 
-        public enum CommandType
+        void Start()
         {
-            Follow, ReturnToShip, Attack, FindScrap
+            roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
         }
 
         public void ReceiveCommand(CommandType command)
         {
+            switch (command)
+            {
+                case CommandType.Idle:
 
+                    break;
+                case CommandType.Follow:
+
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+                    FindScrap();
+                    break;
+            }
         }
+
+        public void Update()
+        {
+            if (CurrentState == CommandType.Follow && targetPlayer != null)
+            {
+                if (setDestinationToPlayerInterval <= 0.0f)
+                {
+                    setDestinationToPlayerInterval = 0.25f;
+                    destination = RoundManager.Instance.GetNavMeshPosition(targetPlayer.transform.position, RoundManager.Instance.navHit, 2.7f);
+                }
+                else
+                {
+                    destination = new Vector3(targetPlayer.transform.position.x, destination.y, targetPlayer.transform.position.z);
+                    setDestinationToPlayerInterval -= Time.deltaTime;
+                }
+            }
+            else if (CurrentState == CommandType.FindScrap)
+            {
+
+            }
+        }
+
 
         public void GetHoldItem()
         {
 
         }
 
+        public void FollowPlayer()
+        {
 
+        }
 
         public void AttackBehavior()
         {
 
         }
 
-        public void FindScrap()
+        public void FindEnemies()
         {
 
         }
 
+        public void FindScrap()
+        {
+            if (Physics.OverlapSphereNonAlloc(base.transform.position, CheckRadius, NearScrapColliders) > 0)
+            {
+
+
+
+                CurrentState = CommandType.FindScrap;
+            }
+            else
+            {
+                CurrentState = CommandType.Idle;
+            }
+        }
+
         public virtual void DoAIInterval()
         {
+            switch (CurrentState)
+            {
+                case CommandType.Idle:
+
+                    break;
+                case CommandType.Follow:
+
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+
+                    break;
+            }
+
+
             if (moveTowardsDestination)
             {
                 agent.SetDestination(destination);
             }
             SyncPositionToClients();
+
+
+
         }
 
         public void SyncPositionToClients()
