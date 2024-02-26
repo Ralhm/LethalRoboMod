@@ -4,10 +4,14 @@ using HarmonyLib;
 using RobotMod.Patches;
 using RobotMod.Robot;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using LethalLib.Modules;
 
 namespace RobotMod
 {
@@ -35,12 +39,27 @@ namespace RobotMod
             mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 
             mls.LogInfo("The robot mod is alive");
+            string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ItemMod/itemmod");
+            mls.LogInfo("ASSET DIR: " + assetDir);
 
             harmony.PatchAll(typeof(RobotModBase));
             harmony.PatchAll(typeof(PlayerControllerBPatch));
             harmony.PatchAll(typeof(RobotController));
 
 
+            
+
+
+            AssetBundle bundle = AssetBundle.LoadFromFile(assetDir);
+            
+            Item RobotItem = bundle.LoadAsset<Item>("Assets/RobotItem.asset");
+            NetworkPrefabs.RegisterNetworkPrefab(RobotItem.spawnPrefab);
+            Utilities.FixMixerGroups(RobotItem.spawnPrefab);
+
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            node.clearPreviousText = true;
+            node.displayText = "This is info about the robot\n\n";
+            Items.RegisterShopItem(RobotItem, null, null, node, 10);
         }
 
 

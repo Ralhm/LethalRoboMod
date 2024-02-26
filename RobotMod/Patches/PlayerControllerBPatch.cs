@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace RobotMod.Patches
 {
@@ -21,6 +22,10 @@ namespace RobotMod.Patches
         static void patchUpdate(ref float ___sprintMeter)
         {
             ___sprintMeter = 1.0f;
+
+            //if (Input.KeyCode)
+
+
         }
 
 
@@ -29,16 +34,19 @@ namespace RobotMod.Patches
             //Do a ray trace in front of the player, just like when calling BeginGrabObject
             //
 
-            
 
+            RaycastHit hit;
             /*
-            interactRay = new Ray(gameplayCamera.transform.position, gameplayCamera.transform.forward);
+            Ray interactRay = new Ray(gameplayCamera.transform.position, gameplayCamera.transform.forward);
             if (!Physics.Raycast(interactRay, out hit, grabDistance, interactableObjectsMask) || hit.collider.gameObject.layer == 8 || !(hit.collider.tag == "PhysicsProp") || twoHanded || sinkingValue > 0.73f)
             {
+
+                hit.collider.gameObject.GetComponent<RobotController>().ReceiveCommand(RobotController.CommandType.FindScrap);
+
                 return;
             }
+            
             */
-
 
 
         }

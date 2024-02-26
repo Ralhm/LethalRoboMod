@@ -23,6 +23,10 @@ using UnityEngine.AI;
 //The Item class has a variable IsScrap. We can use this to detect scrap with the robots FindScrap function
 //The Item class is a scriptable object. basically all grabbable items like scrap and flashlights have a Public Item variable
 //We'll probably need to make a patch for the terminal to add the robot as a purchasable item
+//RoundManager.FindMainEntrance should help to find the entrance
+//TeleportMaskedEnemy will also make for a good reference
+//GrabItem in HoarderBugAI
+
 
 //Useful PlayerController Functions
 //SetDestinationToPosition and SetMovingTowardsTargetPlayerin EnemyAI should be useful references
@@ -30,6 +34,7 @@ using UnityEngine.AI;
 //DiscardHeldObject
 //isHoldingObjecy
 //BeginGrabObject (In order for this to work, we'll need to make the robot look at the object to be grabbed, or refactor the function)
+//I'm thinking we either just hand objects to it, or tell it to grab the nearest piece of scrap
 //PlaceGrabbableObject
 //Grabbable Object has isInShipRoom variable
 

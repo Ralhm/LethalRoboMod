@@ -114,7 +114,6 @@ C:\Users\yoshi\source\repos\RobotMod\RobotMod\obj\Debug\RobotMod.pdb
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\RobotMod.dll
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\RobotMod.pdb
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\UnityEngine.PhysicsModule.dll
-C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\Mono.Cecil.dll
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\MonoMod.Utils.dll
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\MonoMod.RuntimeDetour.dll
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\netstandard.dll
@@ -217,3 +216,4 @@ C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\obj\Debug\RobotMod.c
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\obj\Debug\RobotMod.csproj.CopyComplete
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\obj\Debug\RobotMod.dll
 C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\obj\Debug\RobotMod.pdb
+C:\Users\yoshi\source\repos\RobotMod\LethalRoboMod\RobotMod\bin\Debug\LethalLib.dll
