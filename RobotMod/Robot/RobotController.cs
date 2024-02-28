@@ -1,5 +1,4 @@
 ﻿using GameNetcodeStuff;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +51,7 @@ using UnityEngine.AI;
 
 namespace RobotMod.Robot
 {
-    internal class RobotController : PlayerControllerB
+    public class RobotController : GrabbableObject
     {
 
         float CheckRadius = 40.0f;
@@ -70,7 +69,7 @@ namespace RobotMod.Robot
 
         public CommandType CurrentState;
 
-        public PlayerControllerB targetPlayer;
+        //public PlayerControllerB targetPlayer;
 
         public bool movingTowardsTargetPlayer;
 
@@ -90,17 +89,22 @@ namespace RobotMod.Robot
 
         private float updateDestinationInterval;
 
-        public Item item;
 
         void Awake()
         {
-            item = new Item();
+            Debug.Log("----------USING DLL-----------");
             CommandType type = CommandType.Follow;
         }
 
         void Start()
         {
+            Debug.Log("----------USING DLL-----------");
             roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
+        }
+
+        void OnEnable()
+        {
+            Debug.Log("----------USING DLL-----------");
         }
 
         public void ReceiveCommand(CommandType command)
@@ -127,8 +131,10 @@ namespace RobotMod.Robot
             }
         }
 
-        public void Update()
+        public override void Update()
         {
+            //base.Update();
+            /*
             if (CurrentState == CommandType.Follow && targetPlayer != null)
             {
                 if (setDestinationToPlayerInterval <= 0.0f)
@@ -146,6 +152,7 @@ namespace RobotMod.Robot
             {
 
             }
+            */
         }
 
 
@@ -212,12 +219,13 @@ namespace RobotMod.Robot
             {
                 agent.SetDestination(destination);
             }
-            SyncPositionToClients();
+            //SyncPositionToClients();
 
 
 
         }
-
+        /*
+         * 
         public void SyncPositionToClients()
         {
             if (Vector3.Distance(serverPosition, base.transform.position) > updatePositionThreshold)
@@ -287,5 +295,6 @@ namespace RobotMod.Robot
         public virtual void OnSyncPositionFromServer(Vector3 newPos)
         {
         }
+        */
     }
 }

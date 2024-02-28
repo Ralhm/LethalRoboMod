@@ -39,7 +39,7 @@ namespace RobotMod
             mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 
             mls.LogInfo("The robot mod is alive");
-            string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ItemMod/itemmod");
+            string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "itemmod");
             mls.LogInfo("ASSET DIR: " + assetDir);
 
             harmony.PatchAll(typeof(RobotModBase));
@@ -59,7 +59,7 @@ namespace RobotMod
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
             node.clearPreviousText = true;
             node.displayText = "This is info about the robot\n\n";
-            Items.RegisterShopItem(RobotItem, null, null, node, 10);
+            Items.RegisterShopItem(RobotItem, null, null, node, 5);
         }
 
 

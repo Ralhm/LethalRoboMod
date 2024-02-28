@@ -21,8 +21,8 @@ namespace RobotMod.Patches
         [HarmonyPostfix]
         static void patchUpdate(ref float ___sprintMeter)
         {
-            ___sprintMeter = 1.0f;
-
+            //___sprintMeter = 1.0f;
+            //Debug.Log("-------USING DLL PLAYER SCRIPT In Patch!!!!!!!!!!!!!!");
             //if (Input.KeyCode)
 
 
