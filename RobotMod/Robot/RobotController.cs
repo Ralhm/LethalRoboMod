@@ -51,7 +51,7 @@ using UnityEngine.AI;
 
 namespace RobotMod.Robot
 {
-    public class RobotController : GrabbableObject
+    public class RobotController : PhysicsProp
     {
 
         float CheckRadius = 40.0f;
@@ -96,8 +96,9 @@ namespace RobotMod.Robot
             CommandType type = CommandType.Follow;
         }
 
-        void Start()
+        public override void Start()
         {
+            base.Start();
             Debug.Log("----------USING DLL-----------");
             roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
         }
@@ -105,6 +106,7 @@ namespace RobotMod.Robot
         void OnEnable()
         {
             Debug.Log("----------USING DLL-----------");
+            Debug.Log("----------Updated DLL-----------");
         }
 
         public void ReceiveCommand(CommandType command)
@@ -131,9 +133,16 @@ namespace RobotMod.Robot
             }
         }
 
+        public override void ItemActivate(bool used, bool buttonDown = true)
+        {
+            base.ItemActivate(used, buttonDown);
+
+            Debug.Log("Activating Item!");
+        }
+
         public override void Update()
         {
-            //base.Update();
+            base.Update();
             /*
             if (CurrentState == CommandType.Follow && targetPlayer != null)
             {
@@ -155,6 +164,20 @@ namespace RobotMod.Robot
             */
         }
 
+        public override void GrabItem()
+        {
+            base.GrabItem();
+            Debug.Log("USighn SPECILA GARB");
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
+
+        }
+
+        public override void DiscardItem()
+        {
+            base.DiscardItem();
+            Debug.Log("USighn SPECILA Discard!");
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
+        }
 
         public void GetHoldItem()
         {

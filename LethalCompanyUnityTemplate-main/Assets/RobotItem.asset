@@ -15,8 +15,8 @@ MonoBehaviour:
   itemId: 0
   itemName: Robot
   spawnPositionTypes: []
-  twoHanded: 1
-  twoHandedAnimation: 1
+  twoHanded: 0
+  twoHandedAnimation: 0
   canBeGrabbedBeforeGameStart: 0
   weight: 1.7
   itemIsTrigger: 0
@@ -32,8 +32,8 @@ MonoBehaviour:
   spawnPrefab: {fileID: 8665938816493894978, guid: 5549e43cbb967614fbce3b6478643616,
     type: 3}
   requiresBattery: 1
-  batteryUsage: 0.1
-  automaticallySetUsingPower: 1
+  batteryUsage: 140
+  automaticallySetUsingPower: 0
   itemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   grabAnim: 
   useAnim: 
@@ -55,11 +55,12 @@ MonoBehaviour:
   floorYOffset: 0
   allowDroppingAheadOfPlayer: 0
   restingRotation: {x: 0, y: 0, z: 0}
-  rotationOffset: {x: 90, y: 90, z: 45}
-  positionOffset: {x: -0.4, y: 0, z: -0.6}
+  rotationOffset: {x: 90, y: 70, z: -60}
+  positionOffset: {x: 0.35, y: 0.05, z: -0.4}
   meshOffset: 0
   meshVariants:
-  - {fileID: 0}
+  - {fileID: -5523277661179574252, guid: 19e68bc1cd3fc7d4d8896770c024bc47, type: 3}
+  - {fileID: 6385160460782503386, guid: 458ef956bc57aee40af434c392d971db, type: 3}
   materialVariants: []
   usableInSpecialAnimations: 0
   canBeInspected: 0
