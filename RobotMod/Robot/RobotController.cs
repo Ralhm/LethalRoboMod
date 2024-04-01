@@ -89,6 +89,16 @@ namespace RobotMod.Robot
 
         private float updateDestinationInterval;
 
+        // Radar Variables
+        public bool radarEnabled;
+
+        public GameObject radarDot;
+
+        public string robotName;
+
+        private bool setRandomRobotName;
+        private int robotNameIndex = -1;
+
 
         void Awake()
         {
@@ -109,34 +119,61 @@ namespace RobotMod.Robot
             Debug.Log("----------Updated DLL-----------");
         }
 
-        public void ReceiveCommand(CommandType command)
+        private void OnDisable()
         {
-            switch (command)
+            if (radarEnabled)
             {
-                case CommandType.Idle:
-
-                    break;
-                case CommandType.Follow:
-
-                    break;
-                case CommandType.ReturnToShip:
-
-                    break;
-
-                case CommandType.Attack:
-
-                    break;
-
-                case CommandType.FindScrap:
-                    FindScrap();
-                    break;
+                RemoveRobotFromRadar();
             }
+        }
+
+        public override int GetItemDataToSave()
+        {
+            base.GetItemDataToSave();
+            return robotNameIndex;
+        }
+
+        public override void LoadItemSaveData(int saveData)
+        {
+            base.LoadItemSaveData(saveData);
+            robotNameIndex = saveData;
+        }
+
+        public override void GrabItem()
+        {
+            base.GrabItem();
+            Debug.Log("USighn SPECILA GARB");
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
+
+        }
+
+        public override void DiscardItem()
+        {
+            base.DiscardItem();
+            Debug.Log("USighn SPECILA Discard!");
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
+        }
+
+        public override void EquipItem()
+        {
+            base.EquipItem();
+        }
+
+        public override void PocketItem()
+        {
+            base.PocketItem();
+            isBeingUsed = false;
+            EnableRobot(enable: false);
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);
-
+            if (base.IsOwner)
+		    {
+			    playerHeldBy.DiscardHeldObject();
+		    }
+            EnableRobot(used);
             Debug.Log("Activating Item!");
         }
 
@@ -164,19 +201,28 @@ namespace RobotMod.Robot
             */
         }
 
-        public override void GrabItem()
+        public void ReceiveCommand(CommandType command)
         {
-            base.GrabItem();
-            Debug.Log("USighn SPECILA GARB");
-            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
+            switch (command)
+            {
+                case CommandType.Idle:
 
-        }
+                    break;
+                case CommandType.Follow:
 
-        public override void DiscardItem()
-        {
-            base.DiscardItem();
-            Debug.Log("USighn SPECILA Discard!");
-            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+                    FindScrap();
+                    break;
+            }
         }
 
         public void GetHoldItem()
@@ -319,5 +365,62 @@ namespace RobotMod.Robot
         {
         }
         */
+
+        // Robot Radar Map Controller
+        //***************************
+        public void SetRobotNameLocal(string newName)
+        {
+            robotName = newName;
+            base.gameObject.GetComponentInChildren<ScanNodeProperties>().headerText = robotName;
+            StartOfRound.Instance.mapScreen.ChangeNameOfTargetTransform(base.transform, newName);
+        }
+
+        private void RemoveRobotFromRadar()
+        {
+            StartOfRound.Instance.mapScreen.RemoveTargetFromRadar(base.transform);
+        }
+
+        private void AddRobotToRadar()
+        {
+            if (!setRandomRobotName)
+            {
+                setRandomRobotName = true;
+                int num = (robotNameIndex = ((robotNameIndex != -1) ? robotNameIndex : new System.Random(Mathf.Min(StartOfRound.Instance.randomMapSeed + (int)base.NetworkObjectId, 99999999)).Next(0, StartOfRound.Instance.randomNames.Length)));
+                robotName = StartOfRound.Instance.randomNames[num];
+                base.gameObject.GetComponentInChildren<ScanNodeProperties>().headerText = robotName;
+            }
+            string text = StartOfRound.Instance.mapScreen.AddTransformAsTargetToRadar(base.transform, robotName, isNonPlayer: true);
+            if (!string.IsNullOrEmpty(text))
+            {
+                base.gameObject.GetComponentInChildren<ScanNodeProperties>().headerText = text;
+            }
+            StartOfRound.Instance.mapScreen.SyncOrderOfRadarBoostersInList();
+        }
+
+        public void EnableRobot(bool enable)
+        {
+            radarBoosterAnimator.SetBool("on", enable);
+            radarDot.SetActive(enable);
+            if (enable)
+            {
+                AddRobotToRadar();
+                //robotAudio.Play();
+                //robotAudio.PlayOneShot(turnOnSFX);
+                //WalkieTalkie.TransmitOneShotAudio(radarBoosterAudio, turnOnSFX);
+            }
+            else
+            {
+                RemoveRobotFromRadar();
+                /*
+                if (robotAudio.isPlaying)
+                {
+                    robotAudio.Stop();
+                    robotAudio.PlayOneShot(turnOffSFX);
+                    WalkieTalkie.TransmitOneShotAudio(radarBoosterAudio, turnOffSFX);
+                }
+                */
+            }
+            radarEnabled = enable;
+        }
     }
 }

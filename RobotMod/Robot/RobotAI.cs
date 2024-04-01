@@ -86,7 +86,6 @@ namespace RobotMod.Robot
         [Header("AI Calculation / Netcode")]
         public float AIIntervalTime = 0.2f;
 
-
         public bool isOutside;
 
         private Vector3 mainEntrancePosition;
