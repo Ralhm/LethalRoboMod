@@ -165,6 +165,16 @@ namespace RobotMod.Robot
             }
         }
 
+        private void OnEnable()
+        {
+            agent.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            agent.enabled = false;
+        }
+
         // Start AI Methods
         public virtual void DoAIInterval()
         {

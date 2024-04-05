@@ -48,9 +48,9 @@ using UnityEngine.AI;
 //Networking. IDK how it works on unity and we may have to figure shit out for how Lethal Company makes it work. 
 //We could probably reverse engineer what's there and hopefuly copy/paste what's there into our thing.
 
-
 namespace RobotMod.Robot
 {
+    [RequireComponent(typeof(RobotAI))]
     public class RobotController : PhysicsProp
     {
 
@@ -89,6 +89,9 @@ namespace RobotMod.Robot
 
         private float updateDestinationInterval;
 
+        // Real Robot shit
+        RobotAI robotAI;
+
         // Radar Variables
         public bool radarEnabled;
 
@@ -111,6 +114,7 @@ namespace RobotMod.Robot
             base.Start();
             Debug.Log("----------USING DLL-----------");
             roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
+            robotAI = GetComponent<RobotAI>();
         }
 
         void OnEnable()
@@ -144,14 +148,14 @@ namespace RobotMod.Robot
             base.GrabItem();
             Debug.Log("USighn SPECILA GARB");
             mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
-
+            robotAI.enabled = false;
         }
 
         public override void DiscardItem()
         {
             base.DiscardItem();
             Debug.Log("USighn SPECILA Discard!");
-            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
         }
 
         public override void EquipItem()
@@ -163,7 +167,7 @@ namespace RobotMod.Robot
         {
             base.PocketItem();
             isBeingUsed = false;
-            EnableRobot(enable: false);
+            //EnableRobot(enable: false);
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
@@ -399,11 +403,13 @@ namespace RobotMod.Robot
 
         public void EnableRobot(bool enable)
         {
-            radarBoosterAnimator.SetBool("on", enable);
-            radarDot.SetActive(enable);
+            //radarBoosterAnimator.SetBool("on", enable);
+            //radarDot.SetActive(enable);
             if (enable)
             {
                 AddRobotToRadar();
+                robotAI.enabled = true;
+                mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
                 //robotAudio.Play();
                 //robotAudio.PlayOneShot(turnOnSFX);
                 //WalkieTalkie.TransmitOneShotAudio(radarBoosterAudio, turnOnSFX);
@@ -411,6 +417,8 @@ namespace RobotMod.Robot
             else
             {
                 RemoveRobotFromRadar();
+                robotAI.enabled = false;
+                mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
                 /*
                 if (robotAudio.isPlaying)
                 {

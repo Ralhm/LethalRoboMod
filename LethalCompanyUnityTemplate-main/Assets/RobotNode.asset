@@ -9,31 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e80ae96b3eb9177eea5c8f9dadbcda1, type: 3}
+  m_Script: {fileID: 11500000, guid: a445421aca2ea9b4cb32f0b060488d65, type: 3}
   m_Name: RobotNode
   m_EditorClassIdentifier: 
-  displayText: 
-  terminalEvent: 
-  clearPreviousText: 0
-  maxCharactersToType: 0
-  buyItemIndex: 0
-  isConfirmationNode: 0
-  buyRerouteToMoon: 0
-  displayPlanetInfo: 0
-  lockedInDemo: 0
-  shipUnlockableID: 0
-  buyUnlockable: 0
-  returnFromStorage: 0
-  itemCost: 0
-  creatureFileID: 0
-  creatureName: 
-  storyLogFileID: 0
-  overrideOptions: 0
-  acceptAnything: 0
-  terminalOptions: []
-  playClip: {fileID: 0}
-  playSyncedClip: 0
-  displayTexture: {fileID: 0}
-  displayVideo: {fileID: 0}
-  loadImageSlowly: 0
-  persistentImage: 0
+  maxRange: 0
+  minRange: 0
+  requiresLineOfSight: 0
+  headerText: 
+  subText: 
+  scrapValue: 0
+  creatureScanID: 0
+  nodeType: 0

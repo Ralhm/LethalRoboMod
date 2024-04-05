@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.38358, g: 325.10843, b: 430.30963, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -440,52 +440,52 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1605771654023341927, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 1605771654023341927, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
@@ -495,7 +495,12 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1236714812
       objectReference: {fileID: 0}
-    - target: {fileID: 8665938816493894978, guid: 5549e43cbb967614fbce3b6478643616,
+    - target: {fileID: 7769826335144312096, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 526664072
+      objectReference: {fileID: 0}
+    - target: {fileID: 8665938816493894978, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
         type: 3}
       propertyPath: m_Name
       value: Robot
@@ -504,7 +509,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 5549e43cbb967614fbce3b6478643616, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 611013b7fb6b8a8469e5dc8b716b3a04, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

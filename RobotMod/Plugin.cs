@@ -39,15 +39,14 @@ namespace RobotMod
             mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
 
             mls.LogInfo("The robot mod is alive");
-            string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "itemmod");
+            string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "robotmod");
             mls.LogInfo("ASSET DIR: " + assetDir);
 
             harmony.PatchAll(typeof(RobotModBase));
             harmony.PatchAll(typeof(PlayerControllerBPatch));
             harmony.PatchAll(typeof(RobotController));
+            harmony.PatchAll(typeof(RobotAI));
 
-
-            
 
 
             AssetBundle bundle = AssetBundle.LoadFromFile(assetDir);
