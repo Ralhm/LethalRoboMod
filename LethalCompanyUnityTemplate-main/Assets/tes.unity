@@ -495,16 +495,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1236714812
       objectReference: {fileID: 0}
-    - target: {fileID: 8580272665342467861, guid: 5549e43cbb967614fbce3b6478643616,
-        type: 3}
-      propertyPath: subText
-      value: HEYHEYHEYHEY
-      objectReference: {fileID: 0}
-    - target: {fileID: 8580272665342467861, guid: 5549e43cbb967614fbce3b6478643616,
-        type: 3}
-      propertyPath: scrapValue
-      value: 21474
-      objectReference: {fileID: 0}
     - target: {fileID: 8665938816493894978, guid: 5549e43cbb967614fbce3b6478643616,
         type: 3}
       propertyPath: m_Name
