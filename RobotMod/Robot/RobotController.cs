@@ -155,7 +155,7 @@ namespace RobotMod.Robot
         {
             base.DiscardItem();
             Debug.Log("USighn SPECILA Discard!");
-            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
         }
 
         public override void EquipItem()
