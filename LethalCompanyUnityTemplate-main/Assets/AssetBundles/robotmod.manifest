@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3190099675
+CRC: 1197243799
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7e56e9d6cc93d17b787fc8b407564127
+    Hash: 3eb9936a29f4a59fd67a62a0c7d06bad
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 182c7b99965e7a4c5e191583993e140a
+    Hash: 8d96d5ccf38b760cc295e753dc1391db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7e56e9d6cc93d17b787fc8b407564127
+    Hash: 3eb9936a29f4a59fd67a62a0c7d06bad
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -35,15 +35,15 @@ ClassTypes:
 - Class: 83
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: a445421aca2ea9b4cb32f0b060488d65, type: 3}
+  Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
 - Class: 114
-  Script: {fileID: 985633344, guid: 9fdf2de931fd4e24999216248b964b49, type: 3}
+  Script: {fileID: 11500000, guid: 3c36d0a92cbb1f26a39169ef0eae393a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 9c6e4be8febf77e42ad58fa6ae8a7686, type: 3}
+  Script: {fileID: -1762811040, guid: bce68d3392296b34392fb58eebe4bfb8, type: 3}
 - Class: 114
-  Script: {fileID: -1762811040, guid: 9fdf2de931fd4e24999216248b964b49, type: 3}
+  Script: {fileID: 985633344, guid: bce68d3392296b34392fb58eebe4bfb8, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -52,16 +52,20 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 241
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
+- Class: 245
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: AISearchRoutine
 - AssemblyName: Assembly-CSharp
   ClassName: Battery
 Assets:
-- Assets/RobotItem.asset
-- Assets/Settings/DiffuseColor_Gray.png
-- Assets/Settings/LethalRobot.fbx
-- Assets/Robot.prefab
-- Assets/LethalBaby 1.fbx
 - Assets/6.wav
+- Assets/RobotItem.asset
+- Assets/Settings/LethalRobot.fbx
+- Assets/LethalBaby 1.fbx
 Dependencies: []

@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 310581952
+CRC: 4268418144
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
+      Name: modassets
+      Dependencies: {}
+    Info_1:
       Name: robotmod
       Dependencies: {}

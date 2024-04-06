@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c6e4be8febf77e42ad58fa6ae8a7686, type: 3}
+  m_Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
   m_Name: RobotItem
   m_EditorClassIdentifier: 
   itemId: 0
@@ -18,18 +18,18 @@ MonoBehaviour:
   twoHanded: 0
   twoHandedAnimation: 0
   canBeGrabbedBeforeGameStart: 0
-  weight: 1
+  weight: 1.7
   itemIsTrigger: 0
   holdButtonUse: 0
   itemSpawnsOnGround: 0
-  isConductiveMetal: 1
+  isConductiveMetal: 0
   isScrap: 0
   creditsWorth: 5
   lockedInDemo: 0
   highestSalePercentage: 0
   maxValue: 0
   minValue: 0
-  spawnPrefab: {fileID: 8665938816493894978, guid: 611013b7fb6b8a8469e5dc8b716b3a04,
+  spawnPrefab: {fileID: 8665938816493894978, guid: 5549e43cbb967614fbce3b6478643616,
     type: 3}
   requiresBattery: 1
   batteryUsage: 140
@@ -40,10 +40,10 @@ MonoBehaviour:
   pocketAnim: 
   throwAnim: 
   grabAnimationTime: 1
-  grabSFX: {fileID: 8300000, guid: d58f1ec7512fd274f811e9c01905de04, type: 3}
-  dropSFX: {fileID: 8300000, guid: d58f1ec7512fd274f811e9c01905de04, type: 3}
-  pocketSFX: {fileID: 8300000, guid: d58f1ec7512fd274f811e9c01905de04, type: 3}
-  throwSFX: {fileID: 8300000, guid: d58f1ec7512fd274f811e9c01905de04, type: 3}
+  grabSFX: {fileID: 8300000, guid: 1a3dbcbba28eb774ab25aa2211399427, type: 3}
+  dropSFX: {fileID: 8300000, guid: 1a3dbcbba28eb774ab25aa2211399427, type: 3}
+  pocketSFX: {fileID: 8300000, guid: 1a3dbcbba28eb774ab25aa2211399427, type: 3}
+  throwSFX: {fileID: 8300000, guid: 1a3dbcbba28eb774ab25aa2211399427, type: 3}
   syncGrabFunction: 0
   syncUseFunction: 0
   syncDiscardFunction: 0
@@ -59,8 +59,8 @@ MonoBehaviour:
   positionOffset: {x: 0.35, y: 0.05, z: -0.4}
   meshOffset: 0
   meshVariants:
-  - {fileID: -5523277661179574252, guid: 6497526768c739c47af8c6baa8ce1e33, type: 3}
-  - {fileID: 6385160460782503386, guid: 9dc5100735ca80b45a9d61d83693c490, type: 3}
+  - {fileID: -5523277661179574252, guid: 19e68bc1cd3fc7d4d8896770c024bc47, type: 3}
+  - {fileID: 6385160460782503386, guid: 458ef956bc57aee40af434c392d971db, type: 3}
   materialVariants: []
   usableInSpecialAnimations: 0
   canBeInspected: 0
