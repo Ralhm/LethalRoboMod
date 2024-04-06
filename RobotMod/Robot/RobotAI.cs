@@ -37,6 +37,17 @@ namespace RobotMod.Robot
         // End Network Stuff
 
         // Start AI Variables
+        public enum CommandType
+        {
+            Follow, ReturnToShip, Attack, FindScrap, Idle
+        }
+
+        public CommandType CurrentState;
+
+        float CheckRadius = 40.0f;
+
+        private Collider[] NearScrapColliders;
+
         public bool debugAI;
 
         public NavMeshAgent agent;
@@ -168,6 +179,7 @@ namespace RobotMod.Robot
         private void OnEnable()
         {
             agent.enabled = true;
+            CurrentState = CommandType.Follow;
         }
 
         private void OnDisable()
@@ -176,13 +188,75 @@ namespace RobotMod.Robot
         }
 
         // Start AI Methods
+
         public virtual void DoAIInterval()
         {
+            switch (CurrentState)
+            {
+                case CommandType.Idle:
+
+                    break;
+                case CommandType.Follow:
+
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+
+                    break;
+            }
+
+
             if (moveTowardsDestination)
             {
                 agent.SetDestination(destination);
             }
             SyncPositionToClients();
+        }
+
+        public void ReceiveCommand(CommandType command)
+        {
+            switch (command)
+            {
+                case CommandType.Idle:
+
+                    break;
+                case CommandType.Follow:
+
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+                    FindScrap();
+                    break;
+            }
+        }
+
+        public void FindScrap()
+        {
+            if (Physics.OverlapSphereNonAlloc(base.transform.position, CheckRadius, NearScrapColliders) > 0)
+            {
+
+
+
+                CurrentState = CommandType.FindScrap;
+            }
+            else
+            {
+                CurrentState = CommandType.Idle;
+            }
         }
 
         public void StartSearch(Vector3 startOfSearch, AISearchRoutine newSearch = null)

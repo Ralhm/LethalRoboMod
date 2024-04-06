@@ -160,10 +160,8 @@ MonoBehaviour:
   radarIcon: {fileID: 0}
   reachedFloorTarget: 0
   grabbableToEnemies: 0
-  CurrentState: 0
   movingTowardsTargetPlayer: 0
   moveTowardsDestination: 1
-  agent: {fileID: 0}
   destination: {x: 0, y: 0, z: 0}
   updatePositionThreshold: 1
   serverPosition: {x: 0, y: 0, z: 0}
@@ -330,6 +328,7 @@ MonoBehaviour:
   thisNetworkObject: {fileID: 0}
   updatePositionThreshold: 1
   isClientCalculatingAI: 0
+  CurrentState: 0
   debugAI: 0
   agent: {fileID: 0}
   allAINodes: []

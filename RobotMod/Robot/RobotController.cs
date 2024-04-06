@@ -54,28 +54,15 @@ namespace RobotMod.Robot
     public class RobotController : PhysicsProp
     {
 
-        float CheckRadius = 40.0f;
-
-        private Collider[] NearScrapColliders;
-
-        public enum CommandType
-        {
-            Follow, ReturnToShip, Attack, FindScrap, Idle
-        }
-
         private float setDestinationToPlayerInterval;
 
         private RoundManager roundManager;
-
-        public CommandType CurrentState;
 
         //public PlayerControllerB targetPlayer;
 
         public bool movingTowardsTargetPlayer;
 
         public bool moveTowardsDestination = true;
-
-        public NavMeshAgent agent;
 
         public Vector3 destination;
 
@@ -106,7 +93,7 @@ namespace RobotMod.Robot
         void Awake()
         {
             Debug.Log("----------USING DLL-----------");
-            CommandType type = CommandType.Follow;
+            //CommandType type = CommandType.Follow;
         }
 
         public override void Start()
@@ -155,7 +142,7 @@ namespace RobotMod.Robot
         {
             base.DiscardItem();
             Debug.Log("USighn SPECILA Discard!");
-            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
+            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
         }
 
         public override void EquipItem()
@@ -178,7 +165,7 @@ namespace RobotMod.Robot
 			    playerHeldBy.DiscardHeldObject();
 		    }
             EnableRobot(used);
-            Debug.Log("Activating Item!");
+            Debug.Log("Activating Robot!");
         }
 
         public override void Update()
@@ -205,30 +192,6 @@ namespace RobotMod.Robot
             */
         }
 
-        public void ReceiveCommand(CommandType command)
-        {
-            switch (command)
-            {
-                case CommandType.Idle:
-
-                    break;
-                case CommandType.Follow:
-
-                    break;
-                case CommandType.ReturnToShip:
-
-                    break;
-
-                case CommandType.Attack:
-
-                    break;
-
-                case CommandType.FindScrap:
-                    FindScrap();
-                    break;
-            }
-        }
-
         public void GetHoldItem()
         {
 
@@ -248,55 +211,7 @@ namespace RobotMod.Robot
         {
 
         }
-
-        public void FindScrap()
-        {
-            if (Physics.OverlapSphereNonAlloc(base.transform.position, CheckRadius, NearScrapColliders) > 0)
-            {
-
-
-
-                CurrentState = CommandType.FindScrap;
-            }
-            else
-            {
-                CurrentState = CommandType.Idle;
-            }
-        }
-
-        public virtual void DoAIInterval()
-        {
-            switch (CurrentState)
-            {
-                case CommandType.Idle:
-
-                    break;
-                case CommandType.Follow:
-
-                    break;
-                case CommandType.ReturnToShip:
-
-                    break;
-
-                case CommandType.Attack:
-
-                    break;
-
-                case CommandType.FindScrap:
-
-                    break;
-            }
-
-
-            if (moveTowardsDestination)
-            {
-                agent.SetDestination(destination);
-            }
-            //SyncPositionToClients();
-
-
-
-        }
+        
         /*
          * 
         public void SyncPositionToClients()
@@ -408,7 +323,6 @@ namespace RobotMod.Robot
             if (enable)
             {
                 AddRobotToRadar();
-                robotAI.enabled = true;
                 mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
                 //robotAudio.Play();
                 //robotAudio.PlayOneShot(turnOnSFX);
@@ -417,7 +331,6 @@ namespace RobotMod.Robot
             else
             {
                 RemoveRobotFromRadar();
-                robotAI.enabled = false;
                 mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
                 /*
                 if (robotAudio.isPlaying)
@@ -428,6 +341,8 @@ namespace RobotMod.Robot
                 }
                 */
             }
+            robotAI.enabled = enable;
+            grabbable = !enable;
             radarEnabled = enable;
         }
     }
