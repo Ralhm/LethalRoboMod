@@ -148,14 +148,13 @@ namespace RobotMod.Robot
             base.GrabItem();
             Debug.Log("USighn SPECILA GARB");
             mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
-            robotAI.enabled = false;
+            EnableRobot(false);
         }
 
         public override void DiscardItem()
         {
             base.DiscardItem();
             Debug.Log("USighn SPECILA Discard!");
-            mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[0];
         }
 
         public override void EquipItem()
@@ -167,7 +166,7 @@ namespace RobotMod.Robot
         {
             base.PocketItem();
             isBeingUsed = false;
-            //EnableRobot(enable: false);
+            EnableRobot(enable: false);
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
@@ -177,8 +176,8 @@ namespace RobotMod.Robot
 		    {
 			    playerHeldBy.DiscardHeldObject();
 		    }
-            EnableRobot(used);
-            Debug.Log("Activating Item!");
+            EnableRobot(true);
+            Debug.Log("Activating Item: " + used);
         }
 
         public override void Update()
@@ -429,6 +428,8 @@ namespace RobotMod.Robot
                 */
             }
             radarEnabled = enable;
+            isBeingUsed = enable;
+
         }
     }
 }
