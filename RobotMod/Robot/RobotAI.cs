@@ -13,28 +13,28 @@ namespace RobotMod.Robot
 {
     public class RobotAI : NetworkBehaviour
     {
+        [SerializeField] RobotItem robotItemPrefab;
+
+        float CheckRadius = 40.0f;
+
+        private Collider[] NearScrapColliders;
+
+        public enum CommandType
+        {
+            Follow, ReturnToShip, Attack, FindScrap, Idle
+        }
+
+        public CommandType CurrentState;
+
+        //public PlayerControllerB targetPlayer;
+
+        public bool movingTowardsTargetPlayer;
+
+        public bool moveTowardsDestination = true;
+
+
+
         public bool DebugMode;
-
-        // Start Network Stuff 
-        public float syncMovementSpeed = 0.22f;
-
-        [HideInInspector]
-        public Vector3 serverPosition;
-
-        [HideInInspector]
-        public Vector3 serverRotation;
-
-        private float previousYRotation;
-
-        private float targetYRotation;
-
-        [HideInInspector]
-        public NetworkObject thisNetworkObject;
-
-        public float updatePositionThreshold = 1f;
-
-        public bool isClientCalculatingAI;
-        // End Network Stuff
 
         // Start AI Variables
         public bool debugAI;
@@ -55,8 +55,6 @@ namespace RobotMod.Robot
 
         [HideInInspector]
         public float pathDistance;
-
-        public bool moveTowardsDestination = true;
 
         public Vector3 destination;
 
@@ -80,15 +78,46 @@ namespace RobotMod.Robot
         public float tempDist;
 
         private Vector3 tempVelocity;
+
+        public bool isOutside;
+
+        private Vector3 mainEntrancePosition;
         // End AI Variables
+
+        // Start Network Stuff 
+        public float syncMovementSpeed = 0.22f;
+
+        [HideInInspector]
+        public Vector3 serverPosition;
+
+        [HideInInspector]
+        public Vector3 serverRotation;
+
+        private float previousYRotation;
+
+        private float targetYRotation;
+
+        [HideInInspector]
+        public NetworkObject thisNetworkObject;
+
+        public float updatePositionThreshold = 1f;
+
+        public bool isClientCalculatingAI;
+        // End Network Stuff
 
         // Both AI and Netcode
         [Header("AI Calculation / Netcode")]
         public float AIIntervalTime = 0.2f;
 
-        public bool isOutside;
+        // Radar Variables
+        public bool radarEnabled;
 
-        private Vector3 mainEntrancePosition;
+        public GameObject radarDot;
+
+        public string robotName;
+
+        [HideInInspector] public bool setRandomRobotName;
+        [HideInInspector] public int robotNameIndex = -1;
 
         public virtual void Start()
         {
@@ -119,6 +148,8 @@ namespace RobotMod.Robot
                 {
                     SetClientCalculatingAI(enable: false);
                 }
+
+                AddRobotToRadar();
             }
             catch (Exception arg)
             {
@@ -168,21 +199,113 @@ namespace RobotMod.Robot
         private void OnEnable()
         {
             agent.enabled = true;
+
+            if (radarEnabled)
+            {
+                AddRobotToRadar();
+            }
         }
 
         private void OnDisable()
         {
             agent.enabled = false;
+
+            if (radarEnabled)
+            {
+                RemoveRobotFromRadar();
+            }
+           
         }
+
+        public void BecomeItem()
+        {
+            if (robotItemPrefab)
+            {
+                RobotItem newItem = Instantiate(robotItemPrefab, transform.position, transform.rotation);
+
+                newItem.robotName = robotName;
+                newItem.setRandomRobotName = setRandomRobotName;
+                newItem.robotNameIndex = robotNameIndex;
+
+                Destroy(gameObject);
+            }
+        }
+
+        // Start Command stuff
+        public void ReceiveCommand(CommandType command)
+        {
+            switch (command)
+            {
+                case CommandType.Idle:
+
+                    break;
+                case CommandType.Follow:
+
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+                    FindScrap();
+                    break;
+            }
+        }
+
+        public void FindScrap()
+        {
+            if (Physics.OverlapSphereNonAlloc(base.transform.position, CheckRadius, NearScrapColliders) > 0)
+            {
+
+
+
+                CurrentState = CommandType.FindScrap;
+            }
+            else
+            {
+                CurrentState = CommandType.Idle;
+            }
+        }
+
+        // End Command Stuff
 
         // Start AI Methods
         public virtual void DoAIInterval()
         {
+            switch (CurrentState)
+            {
+                case CommandType.Idle:
+
+                    break;
+                case CommandType.Follow:
+
+                    break;
+                case CommandType.ReturnToShip:
+
+                    break;
+
+                case CommandType.Attack:
+
+                    break;
+
+                case CommandType.FindScrap:
+
+                    break;
+            }
+
+
             if (moveTowardsDestination)
             {
                 agent.SetDestination(destination);
             }
             SyncPositionToClients();
+
+
+
         }
 
         public void StartSearch(Vector3 startOfSearch, AISearchRoutine newSearch = null)
@@ -531,6 +654,63 @@ namespace RobotMod.Robot
             return true;
         }
         // End AI Methods
+
+        // Robot Radar Map Controller
+        //***************************
+        public void EnableRobot(bool enable)
+        {
+            radarDot.SetActive(enable);
+            if (enable)
+            {
+                AddRobotToRadar();
+                //robotAudio.Play();
+                //robotAudio.PlayOneShot(turnOnSFX);
+                //WalkieTalkie.TransmitOneShotAudio(radarBoosterAudio, turnOnSFX);
+            }
+            else
+            {
+                RemoveRobotFromRadar();
+                /*
+                if (robotAudio.isPlaying)
+                {
+                    robotAudio.Stop();
+                    robotAudio.PlayOneShot(turnOffSFX);
+                    WalkieTalkie.TransmitOneShotAudio(radarBoosterAudio, turnOffSFX);
+                }
+                */
+            }
+            radarEnabled = enable;
+        }
+
+        public void SetRobotNameLocal(string newName)
+        {
+            robotName = newName;
+            base.gameObject.GetComponentInChildren<ScanNodeProperties>().headerText = robotName;
+            StartOfRound.Instance.mapScreen.ChangeNameOfTargetTransform(base.transform, newName);
+        }
+
+        private void RemoveRobotFromRadar()
+        {
+            StartOfRound.Instance.mapScreen.RemoveTargetFromRadar(base.transform);
+        }
+
+        private void AddRobotToRadar()
+        {
+            if (!setRandomRobotName)
+            {
+                setRandomRobotName = true;
+                int num = (robotNameIndex = ((robotNameIndex != -1) ? robotNameIndex : new System.Random(Mathf.Min(StartOfRound.Instance.randomMapSeed + (int)base.NetworkObjectId, 99999999)).Next(0, StartOfRound.Instance.randomNames.Length)));
+                robotName = StartOfRound.Instance.randomNames[num];
+            }
+            base.gameObject.GetComponentInChildren<ScanNodeProperties>().headerText = robotName;
+
+            string text = StartOfRound.Instance.mapScreen.AddTransformAsTargetToRadar(base.transform, robotName, isNonPlayer: true);
+            if (!string.IsNullOrEmpty(text))
+            {
+                base.gameObject.GetComponentInChildren<ScanNodeProperties>().headerText = text;
+            }
+            StartOfRound.Instance.mapScreen.SyncOrderOfRadarBoostersInList();
+        }
 
         // Start Networking Methods
         public void SyncPositionToClients()

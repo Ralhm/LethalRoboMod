@@ -44,7 +44,7 @@ namespace RobotMod
 
             harmony.PatchAll(typeof(RobotModBase));
             harmony.PatchAll(typeof(PlayerControllerBPatch));
-            harmony.PatchAll(typeof(RobotController));
+            harmony.PatchAll(typeof(RobotItem));
             harmony.PatchAll(typeof(RobotAI));
 
 

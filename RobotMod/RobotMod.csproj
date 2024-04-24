@@ -80,7 +80,7 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robot\RobotAI.cs" />
-    <Compile Include="Robot\RobotController.cs" />
+    <Compile Include="Robot\RobotItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
