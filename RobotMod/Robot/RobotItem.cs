@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,13 +52,13 @@ using UnityEngine.AI;
 namespace RobotMod.Robot
 {
     //[RequireComponent(typeof(RobotAI))]
-    public class RobotItem : PhysicsProp
+    public class RobotItem : GrabbableObject
     {
 
         // Real Robot shit
         [SerializeField] RobotAI robotAIPrefab;
 
-        private RoundManager roundManager;
+        //private RoundManager roundManager;
 
         // Radar Variables
         public string robotName = "";
@@ -76,7 +77,7 @@ namespace RobotMod.Robot
         {
             base.Start();
             Debug.Log("----------USING DLL-----------");
-            roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
+            //roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
 
             if (!setRandomRobotName)
             {
@@ -169,6 +170,17 @@ namespace RobotMod.Robot
         {
             if(robotAIPrefab)
             {
+                StartCoroutine(DelayBecomeBot());
+            }
+        }
+
+        private IEnumerator DelayBecomeBot()
+        {
+            yield return new WaitForSeconds(1);
+
+            if (!isHeld && !isHeldByEnemy)
+            {
+
                 RobotAI newRobot = Instantiate(robotAIPrefab, transform.position, transform.rotation);
 
                 newRobot.robotName = robotName;

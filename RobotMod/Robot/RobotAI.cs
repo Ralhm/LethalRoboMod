@@ -15,6 +15,8 @@ namespace RobotMod.Robot
     {
         [SerializeField] RobotItem robotItemPrefab;
 
+        //private RoundManager roundManager;
+
         float CheckRadius = 40.0f;
 
         private Collider[] NearScrapColliders;
@@ -130,6 +132,9 @@ namespace RobotMod.Robot
         {
             try
             {
+                
+                //roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
+
                 agent = base.gameObject.GetComponentInChildren<NavMeshAgent>();
                 agent.enabled = true;
                 thisNetworkObject = base.gameObject.GetComponentInChildren<NetworkObject>();
@@ -158,6 +163,8 @@ namespace RobotMod.Robot
                 }
 
                 AddRobotToRadar();
+
+                //StartCoroutine(DelayBecomeItem());
             }
             catch (Exception arg)
             {
@@ -207,7 +214,7 @@ namespace RobotMod.Robot
             }
         }
 
-        private void OnEnable()
+        void OnEnable()
         {
             agent.enabled = true;
 
@@ -217,15 +224,23 @@ namespace RobotMod.Robot
             }
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
-            //agent.enabled = false;
+            agent.enabled = false;
 
             if (radarEnabled)
             {
                 RemoveRobotFromRadar();
             }
            
+        }
+
+        void OnDestroy()
+        {
+            if (radarEnabled)
+            {
+                RemoveRobotFromRadar();
+            }
         }
 
         public void HoldObject()
@@ -235,7 +250,6 @@ namespace RobotMod.Robot
 
         public void DropObject()
         {
-
         }
 
         public void BecomeItem()
@@ -248,6 +262,24 @@ namespace RobotMod.Robot
                 newItem.setRandomRobotName = setRandomRobotName;
                 newItem.robotNameIndex = robotNameIndex;
 
+                RemoveRobotFromRadar();
+                Destroy(gameObject);
+            }
+        }
+
+        private IEnumerator DelayBecomeItem()
+        {
+            if (robotItemPrefab)
+            {
+                yield return new WaitForSeconds(20);
+
+                RobotItem newItem = Instantiate(robotItemPrefab, transform.position, transform.rotation);
+
+                newItem.robotName = robotName;
+                newItem.setRandomRobotName = setRandomRobotName;
+                newItem.robotNameIndex = robotNameIndex;
+
+                RemoveRobotFromRadar();
                 Destroy(gameObject);
             }
         }
