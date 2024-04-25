@@ -24,7 +24,7 @@ namespace RobotMod.Robot
             Follow, ReturnToShip, Attack, FindScrap, Idle
         }
 
-        public CommandType CurrentState;
+        public CommandType CurrentState = CommandType.Follow;
 
         //public PlayerControllerB targetPlayer;
 
@@ -228,6 +228,16 @@ namespace RobotMod.Robot
            
         }
 
+        public void HoldObject()
+        {
+
+        }
+
+        public void DropObject()
+        {
+
+        }
+
         public void BecomeItem()
         {
             if (robotItemPrefab)
@@ -245,16 +255,17 @@ namespace RobotMod.Robot
         // Start Command stuff
         public void ReceiveCommand(CommandType command)
         {
+            Debug.Log("-----ROBOT RECEIVED A COMMAND!!!!-------");
             switch (command)
             {
                 case CommandType.Idle:
-
+                    CurrentState = CommandType.Idle;
                     break;
                 case CommandType.Follow:
-
+                    CurrentState = CommandType.Follow;
                     break;
                 case CommandType.ReturnToShip:
-
+                    CurrentState = CommandType.ReturnToShip;
                     break;
 
                 case CommandType.Attack:
@@ -288,29 +299,10 @@ namespace RobotMod.Robot
         public virtual void DoAIInterval()
         {
             Debug.Log("DoAIInterval()");
-            //switch (CurrentState)
-            //{
-            //    case CommandType.Idle:
-
-            //        break;
-            //    case CommandType.Follow:
-
-            //        break;
-            //    case CommandType.ReturnToShip:
-
-            //        break;
-
-            //    case CommandType.Attack:
-
-            //        break;
-
-            //    case CommandType.FindScrap:
-
-            //        break;
-            //}
 
 
-            if (moveTowardsDestination)
+
+            if (moveTowardsDestination && CurrentState == CommandType.Follow)
             {
                 agent.SetDestination(destination);
             }
