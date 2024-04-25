@@ -109,7 +109,6 @@ namespace RobotMod.Robot
         {
             base.GrabItem();
             Debug.Log("USighn SPECILA GARB");
-            //mainObjectRenderer.GetComponent<MeshFilter>().mesh = itemProperties.meshVariants[1];
         }
 
         public override void DiscardItem()
@@ -127,7 +126,6 @@ namespace RobotMod.Robot
         {
             base.PocketItem();
             isBeingUsed = false;
-            //EnableRobot(enable: false);
         }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
@@ -137,7 +135,6 @@ namespace RobotMod.Robot
 		    {
 			    playerHeldBy.DiscardHeldObject();
 		    }
-
             Debug.Log("Activating Item: " + used);
 
             BecomeRobot();

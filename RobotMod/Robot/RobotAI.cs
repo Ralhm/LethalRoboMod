@@ -28,7 +28,7 @@ namespace RobotMod.Robot
 
         //public PlayerControllerB targetPlayer;
 
-        public bool movingTowardsTargetPlayer;
+        public bool movingTowardsTargetPlayer = true;
 
         public bool moveTowardsDestination = true;
 
@@ -119,11 +119,19 @@ namespace RobotMod.Robot
         [HideInInspector] public bool setRandomRobotName;
         [HideInInspector] public int robotNameIndex = -1;
 
+        public PlayerControllerB targetPlayer;
+
+        [Header("Behaviors")]
+        public AISearchRoutine searchForPlayers;
+
+        private float setDestinatioToPlayerInterval;
+
         public virtual void Start()
         {
             try
             {
                 agent = base.gameObject.GetComponentInChildren<NavMeshAgent>();
+                agent.enabled = true;
                 thisNetworkObject = base.gameObject.GetComponentInChildren<NetworkObject>();
                 serverPosition = base.transform.position;
                 isOutside = base.transform.position.y > -80f;
@@ -159,18 +167,21 @@ namespace RobotMod.Robot
 
         public virtual void Update()
         {
-            if (!base.IsOwner)
+            //Debug.Log("Update");
+            //Debug.Log("Agent: " + agent.enabled);
+            //Debug.Log("movingTowardsTargetPlayer = " + movingTowardsTargetPlayer + ", targetPlayer = " + targetPlayer);
+            if (movingTowardsTargetPlayer && targetPlayer != null)
             {
-                if (currentSearch.inProgress)
+                if (setDestinatioToPlayerInterval <= 0f)
                 {
-                    StopSearch(currentSearch);
+                    setDestinatioToPlayerInterval = 0.25f;
+                    destination = RoundManager.Instance.GetNavMeshPosition(targetPlayer.transform.position, RoundManager.Instance.navHit, 2.7f);
                 }
-                SetClientCalculatingAI(enable: false);
-
-                base.transform.position = Vector3.SmoothDamp(base.transform.position, serverPosition, ref tempVelocity, syncMovementSpeed);
-                base.transform.eulerAngles = new Vector3(base.transform.eulerAngles.x, Mathf.LerpAngle(base.transform.eulerAngles.y, targetYRotation, 15f * Time.deltaTime), base.transform.eulerAngles.z);
-
-                return;
+                else
+                {
+                    destination = new Vector3(targetPlayer.transform.position.x, destination.y, targetPlayer.transform.position.z);
+                    setDestinatioToPlayerInterval -= Time.deltaTime;
+                }
             }
             if (updateDestinationInterval >= 0f)
             {
@@ -208,7 +219,7 @@ namespace RobotMod.Robot
 
         private void OnDisable()
         {
-            agent.enabled = false;
+            //agent.enabled = false;
 
             if (radarEnabled)
             {
@@ -276,26 +287,27 @@ namespace RobotMod.Robot
         // Start AI Methods
         public virtual void DoAIInterval()
         {
-            switch (CurrentState)
-            {
-                case CommandType.Idle:
+            Debug.Log("DoAIInterval()");
+            //switch (CurrentState)
+            //{
+            //    case CommandType.Idle:
 
-                    break;
-                case CommandType.Follow:
+            //        break;
+            //    case CommandType.Follow:
 
-                    break;
-                case CommandType.ReturnToShip:
+            //        break;
+            //    case CommandType.ReturnToShip:
 
-                    break;
+            //        break;
 
-                case CommandType.Attack:
+            //    case CommandType.Attack:
 
-                    break;
+            //        break;
 
-                case CommandType.FindScrap:
+            //    case CommandType.FindScrap:
 
-                    break;
-            }
+            //        break;
+            //}
 
 
             if (moveTowardsDestination)
@@ -304,7 +316,17 @@ namespace RobotMod.Robot
             }
             SyncPositionToClients();
 
-
+            if (TargetClosestPlayer(4f))
+            {
+                //Debug.Log("Moving towards target player!");
+                StopSearch(searchForPlayers);
+                movingTowardsTargetPlayer = true;
+            }
+            else
+            {
+                movingTowardsTargetPlayer = false;
+                StartSearch(base.transform.position, searchForPlayers);
+            }
 
         }
 
@@ -653,6 +675,35 @@ namespace RobotMod.Robot
             destination = RoundManager.Instance.GetNavMeshPosition(position, RoundManager.Instance.navHit, -1f);
             return true;
         }
+
+        public bool TargetClosestPlayer(float bufferDistance = 1.5f, bool requireLineOfSight = false, float viewWidth = 70f)
+        {
+            mostOptimalDistance = 2000f;
+            PlayerControllerB playerControllerB = targetPlayer;
+            targetPlayer = null;
+            for (int i = 0; i < StartOfRound.Instance.connectedPlayersAmount + 1; i++)
+            {
+                tempDist = Vector3.Distance(base.transform.position, StartOfRound.Instance.allPlayerScripts[i].transform.position);
+                if (tempDist < mostOptimalDistance)
+                {
+                    mostOptimalDistance = tempDist;
+                    targetPlayer = StartOfRound.Instance.allPlayerScripts[i];
+                }
+            }
+            if (targetPlayer != null && bufferDistance > 0f && playerControllerB != null && Mathf.Abs(mostOptimalDistance - Vector3.Distance(base.transform.position, playerControllerB.transform.position)) < bufferDistance)
+            {
+                targetPlayer = playerControllerB;
+            }
+            return targetPlayer != null;
+        }
+
+        public void SetMovingTowardsTargetPlayer(PlayerControllerB playerScript)
+        {
+            movingTowardsTargetPlayer = true;
+            targetPlayer = playerScript;
+        }
+
+
         // End AI Methods
 
         // Robot Radar Map Controller
@@ -836,7 +887,7 @@ namespace RobotMod.Robot
         public void SetClientCalculatingAI(bool enable)
         {
             isClientCalculatingAI = enable;
-            agent.enabled = enable;
+            //agent.enabled = enable;
         }
         // End Networking Methods
     }
