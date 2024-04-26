@@ -8,12 +8,13 @@ using UnityEngine.AI;
 using UnityEngine;
 using GameNetcodeStuff;
 using System.Collections;
+//using LethalLib.Modules;
 
 namespace RobotMod.Robot
 {
     public class RobotAI : NetworkBehaviour
     {
-        [SerializeField] RobotItem robotItemPrefab;
+        [SerializeField] GameObject robotItemPrefab;
 
         //private RoundManager roundManager;
 
@@ -311,14 +312,26 @@ namespace RobotMod.Robot
         {
             if (robotItemPrefab)
             {
-                RobotItem newItem = Instantiate(robotItemPrefab, transform.position, transform.rotation);
+                GameObject item = GameObject.Instantiate(robotItemPrefab, transform.position, transform.rotation, UnityEngine.Object.FindObjectOfType<StartOfRound>().propsContainer);
 
-                newItem.robotName = robotName;
-                newItem.setRandomRobotName = setRandomRobotName;
-                newItem.robotNameIndex = robotNameIndex;
+                if (item)
+                {
+                    item.GetComponent<NetworkObject>().Spawn();
 
-                RemoveRobotFromRadar();
-                Destroy(gameObject);
+                    //item.transform.position = transform.position;
+                    //item.transform.rotation = transform.rotation;
+
+                    RobotItem newItem = item.GetComponent<RobotItem>();
+                    if (newItem != null)
+                    {
+                        newItem.robotName = robotName;
+                        newItem.setRandomRobotName = setRandomRobotName;
+                        newItem.robotNameIndex = robotNameIndex;
+
+                        RemoveRobotFromRadar();
+                        Destroy(gameObject);
+                    }
+                }
             }
         }
 
@@ -328,14 +341,7 @@ namespace RobotMod.Robot
             {
                 yield return new WaitForSeconds(20);
 
-                RobotItem newItem = Instantiate(robotItemPrefab, transform.position, transform.rotation);
-
-                newItem.robotName = robotName;
-                newItem.setRandomRobotName = setRandomRobotName;
-                newItem.robotNameIndex = robotNameIndex;
-
-                RemoveRobotFromRadar();
-                Destroy(gameObject);
+                BecomeItem();
             }
         }
 
@@ -443,21 +449,28 @@ namespace RobotMod.Robot
 
             if (moveTowardsDestination && CurrentState == CommandType.Follow)
             {
-                agent.SetDestination(destination);
+                if (TargetClosestPlayer(4f))
+                {
+                    //Debug.Log("Moving towards target player!");
+                    StopSearch(searchForPlayers);
+                    movingTowardsTargetPlayer = true;
+                }
+                else
+                {
+                    movingTowardsTargetPlayer = false;
+                    StartSearch(base.transform.position, searchForPlayers);
+                }
+
+                if((transform.position - destination).magnitude > 1)
+                    agent.SetDestination(destination);
+                else
+                {
+                    agent.SetDestination(transform.position);
+                }
             }
             SyncPositionToClients();
 
-            if (TargetClosestPlayer(4f))
-            {
-                //Debug.Log("Moving towards target player!");
-                StopSearch(searchForPlayers);
-                movingTowardsTargetPlayer = true;
-            }
-            else
-            {
-                movingTowardsTargetPlayer = false;
-                StartSearch(base.transform.position, searchForPlayers);
-            }
+            
 
         }
 

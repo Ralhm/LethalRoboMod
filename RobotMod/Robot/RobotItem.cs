@@ -56,7 +56,7 @@ namespace RobotMod.Robot
     {
 
         // Real Robot shit
-        [SerializeField] RobotAI robotAIPrefab;
+        [SerializeField] GameObject robotAIPrefab;
 
         //private RoundManager roundManager;
 
@@ -180,14 +180,26 @@ namespace RobotMod.Robot
 
             if (!isHeld && !isHeldByEnemy)
             {
+                if (robotAIPrefab)
+                {
+                    //GameObject robot = LethalLib.Modules.NetworkPrefabs.CloneNetworkPrefab(robotAIPrefab);
+                    GameObject robot = Instantiate(robotAIPrefab, transform.position, transform.rotation);
 
-                RobotAI newRobot = Instantiate(robotAIPrefab, transform.position, transform.rotation);
+                    if (robot)
+                    {
+                        RobotAI newRobot = robot.GetComponent<RobotAI>();
+                        if (newRobot != null)
+                        {
 
-                newRobot.robotName = robotName;
-                newRobot.setRandomRobotName = setRandomRobotName;
-                newRobot.robotNameIndex = robotNameIndex;
+                            newRobot.robotName = robotName;
+                            newRobot.setRandomRobotName = setRandomRobotName;
+                            newRobot.robotNameIndex = robotNameIndex;
 
-                Destroy(gameObject);
+                            Destroy(gameObject);
+                        }
+                    }
+                }
+           
             }
         }
 
