@@ -72,7 +72,11 @@ namespace RobotMod.Robot
         private System.Random searchRoutineRandom;
         // End Path Finding Info
 
-        public GrabbableObject targetObject;
+        public GrabbableObject heldItem;
+        public GrabbableObject targetItem;
+        public bool HoldingItem;
+
+        Transform grabTarget;
 
         public bool movingTowardsTarget;
 
@@ -170,6 +174,8 @@ namespace RobotMod.Robot
             {
                 Debug.LogError($"Error when initializing enemy variables for {base.gameObject.name} : {arg}");
             }
+
+            
         }
 
         public virtual void Update()
@@ -243,13 +249,62 @@ namespace RobotMod.Robot
             }
         }
 
-        public void HoldObject()
-        {
 
+
+        public bool HoldObject(NetworkObject item)
+        {
+            if (HoldingItem)
+            {
+                return false;
+            }
+
+
+
+            heldItem = item.gameObject.GetComponent<GrabbableObject>();
+            heldItem.parentObject = this.transform;
+            heldItem.hasHitGround = false;
+            heldItem.GrabItem();
+            heldItem.EnablePhysics(enable: false);
+            HoldingItem = true;
+            return true;
         }
 
         public void DropObject()
         {
+            if (heldItem == null)
+            {
+                return;
+            }
+            /*
+            heldItem.EnablePhysics(enable: true);
+            heldItem.EnableItemMeshes(enable: true);
+            heldItem.isHeld = false;
+            heldItem.isPocketed = false;
+            heldItem.heldByPlayerOnServer = false;
+            //player.SetItemInElevator(isInHangarShipRoom, isInElevator, placeObject);
+            heldItem.parentObject = null;
+            heldItem.transform.SetParent(transform, worldPositionStays: true);
+            heldItem.startFallingPosition = heldItem.transform.localPosition;
+            // heldItem.transform.localScale = heldItem.originalScale;
+            //heldItem.transform.localPosition = positionOffset;
+            //heldItem.targetFloorPosition = positionOffset;
+            heldItem.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+            heldItem.fallTime = 1.1f;
+            heldItem.OnPlaceObject();
+            */
+
+            
+            heldItem.parentObject = null;
+            heldItem.transform.SetParent(StartOfRound.Instance.propsContainer, worldPositionStays: true);
+            heldItem.EnablePhysics(enable: true);
+            heldItem.fallTime = 0;
+            heldItem.startFallingPosition = heldItem.transform.parent.InverseTransformPoint(heldItem.transform.position);
+            heldItem.targetFloorPosition = heldItem.transform.parent.InverseTransformPoint(heldItem.GetItemFloorPosition());
+            heldItem.floorYRot = -1;
+            heldItem.DiscardItemFromEnemy();
+            heldItem = null;
+            
+
         }
 
         public void BecomeItem()
@@ -312,17 +367,69 @@ namespace RobotMod.Robot
 
         public void FindScrap()
         {
-            if (Physics.OverlapSphereNonAlloc(base.transform.position, CheckRadius, NearScrapColliders) > 0)
+            if (Physics.OverlapSphereNonAlloc(transform.position, 100, NearScrapColliders) > 0)
             {
 
+                for (int i = 0; i < NearScrapColliders.Length; i++)
+                {
+                    GrabbableObject TestObject = NearScrapColliders[i].gameObject.GetComponent<GrabbableObject>();
+                    if (TestObject != null)
+                    {
+                        targetItem = TestObject;
+                        CurrentState = CommandType.FindScrap;
+                        return;
+                    }
+                }
 
-
-                CurrentState = CommandType.FindScrap;
+                
             }
             else
             {
                 CurrentState = CommandType.Idle;
             }
+        }
+
+        public void GrabItemIfClose()
+        {
+            if (Physics.CheckSphere(transform.position, 100, 832))
+            {
+                Debug.Log("-----SPHERE FOUND AN OBJECT-------");
+            }
+
+            RaycastHit hit;
+            if (Physics.SphereCast(transform.position, 200, -transform.up, out hit, 150, 832))
+            {
+                GrabbableObject TestObject = hit.collider.gameObject.GetComponent<GrabbableObject>();
+                if (TestObject != null)
+                {
+                    Debug.Log("-----FOUND AN OBJECT IN SPHERE CAST: " + TestObject.name);
+                    HoldObject(TestObject.GetComponent<NetworkObject>());
+                    return;
+                }
+            }
+            else
+            {
+                Debug.Log("-----SPHERE CAST FOUND NO OBJECTS!!!!-------");
+            }
+
+            if (Physics.OverlapSphereNonAlloc(transform.position, 400, NearScrapColliders, 832) > 0)
+            {
+                for (int i = 0; i < NearScrapColliders.Length; i++)
+                {
+                    GrabbableObject TestObject = NearScrapColliders[i].gameObject.GetComponent<GrabbableObject>();
+                    if (TestObject != null)
+                    {
+                        Debug.Log("-----FOUND AN OBJECT: " + TestObject.name);
+                        HoldObject(TestObject.GetComponent<NetworkObject>());
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("-----FOUND NO OBJECTS!!!!-------");
+            }
+
         }
 
         // End Command Stuff
