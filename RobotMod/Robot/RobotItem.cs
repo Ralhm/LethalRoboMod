@@ -81,9 +81,9 @@ namespace RobotMod.Robot
 
             if (!setRandomRobotName)
             {
-                setRandomRobotName = true;
-                int num = (robotNameIndex = ((robotNameIndex != -1) ? robotNameIndex : new System.Random(Mathf.Min(StartOfRound.Instance.randomMapSeed + (int)base.NetworkObjectId, 99999999)).Next(0, StartOfRound.Instance.randomNames.Length)));
-                robotName = StartOfRound.Instance.randomNames[num];
+                //setRandomRobotName = true;
+                //int num = (robotNameIndex = ((robotNameIndex != -1) ? robotNameIndex : new System.Random(Mathf.Min(StartOfRound.Instance.randomMapSeed + (int)base.NetworkObjectId, 99999999)).Next(0, StartOfRound.Instance.randomNames.Length)));
+                //robotName = StartOfRound.Instance.randomNames[num];
             }
         }
 
