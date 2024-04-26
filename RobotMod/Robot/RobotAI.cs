@@ -64,7 +64,8 @@ namespace RobotMod.Robot
         private float updateDestinationInterval;
 
         // Start Path Finding Info
-        public AISearchRoutine currentSearch;
+        public AISearchRoutine currentSearch = null;
+        public AISearchRoutine scrapSearch;
 
         public Coroutine searchCoroutine;
 
@@ -277,7 +278,7 @@ namespace RobotMod.Robot
         private void RobotUseMainEntrance()
         {
             isOutside = !isOutside;
-            Vector3 navMeshPosition = RoundManager.Instance.GetNavMeshPosition(RoundManager.FindMainEntrancePosition(isOutside, isOutside));
+            Vector3 navMeshPosition = RoundManager.Instance.GetNavMeshPosition(RoundManager.FindMainEntrancePosition(true, isOutside));
                 agent.enabled = false;
                 base.transform.position = navMeshPosition;
                 agent.enabled = true;
@@ -292,7 +293,7 @@ namespace RobotMod.Robot
                 return false;
             }
 
-
+            targetItem = null;
 
             heldItem = item.gameObject.GetComponent<GrabbableObject>();
             heldItem.parentObject = this.transform;
@@ -399,7 +400,7 @@ namespace RobotMod.Robot
                     break;
 
                 case CommandType.FindScrap:
-                    FindScrap();
+                    CurrentState = CommandType.FindScrap;
                     break;
             }
         }
@@ -504,7 +505,8 @@ namespace RobotMod.Robot
 
             if(moveTowardsDestination && CurrentState == CommandType.ReturnToShip)
             {
-                if(isOutside)
+                movingTowardsTargetPlayer = false;
+                if (isOutside)
                 {
                     agent.SetDestination(shipPosition);
                 }
@@ -520,6 +522,40 @@ namespace RobotMod.Robot
                     }
                 }
             }
+
+            if (moveTowardsDestination && CurrentState == CommandType.FindScrap)
+            {
+                movingTowardsTargetPlayer = false;
+                if (isOutside)
+                {
+                    if ((transform.position - mainEntrancePosition).magnitude < 2)
+                    {
+                        RobotUseMainEntrance();
+                    }
+                    else
+                    {
+                        agent.SetDestination(mainEntrancePosition);
+                    }
+                }
+                else
+                {
+                    if(!scrapSearch.inProgress)
+                        StartSearch(transform.position, scrapSearch);
+                    
+                    if(scrapSearch.inProgress)
+                        agent.SetDestination(destination);
+                    else
+                        agent.SetDestination(transform.position);
+                }
+            }
+            else
+            {
+                if(scrapSearch.inProgress)
+                {
+                    StopSearch(scrapSearch);
+                }
+            }
+
             SyncPositionToClients();
 
         }
