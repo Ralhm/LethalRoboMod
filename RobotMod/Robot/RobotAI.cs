@@ -89,6 +89,8 @@ namespace RobotMod.Robot
         public bool isOutside;
 
         private Vector3 mainEntrancePosition;
+
+        private Vector3 shipPosition;
         // End AI Variables
 
         // Start Network Stuff 
@@ -137,8 +139,16 @@ namespace RobotMod.Robot
         {
             try
             {
-                
+
                 //roundManager = UnityEngine.Object.FindObjectOfType<RoundManager>();
+
+                HangarShipDoor ship = FindObjectOfType<HangarShipDoor>();
+                {
+                    if (ship != null)
+                    {
+                        shipPosition = ship.transform.position;
+                    }
+                }
 
                 agent = base.gameObject.GetComponentInChildren<NavMeshAgent>();
                 agent.enabled = true;
@@ -250,7 +260,30 @@ namespace RobotMod.Robot
             }
         }
 
+        void SetRobotOutside(bool outside = false)
+        {
+            isOutside = outside;
+            mainEntrancePosition = RoundManager.FindMainEntrancePosition(getTeleportPosition: true, isOutside);
+            if (isOutside)
+            {
+                allAINodes = GameObject.FindGameObjectsWithTag("OutsideAINode");
+            }
+            else
+            {
+                allAINodes = GameObject.FindGameObjectsWithTag("AINode");
+            }
+        }
 
+        private void RobotUseMainEntrance()
+        {
+            isOutside = !isOutside;
+            Vector3 navMeshPosition = RoundManager.Instance.GetNavMeshPosition(RoundManager.FindMainEntrancePosition(isOutside, isOutside));
+                agent.enabled = false;
+                base.transform.position = navMeshPosition;
+                agent.enabled = true;
+            serverPosition = navMeshPosition;
+            SetRobotOutside(isOutside);
+        }
 
         public bool HoldObject(NetworkObject item)
         {
@@ -468,9 +501,26 @@ namespace RobotMod.Robot
                     agent.SetDestination(transform.position);
                 }
             }
-            SyncPositionToClients();
 
-            
+            if(moveTowardsDestination && CurrentState == CommandType.ReturnToShip)
+            {
+                if(isOutside)
+                {
+                    agent.SetDestination(shipPosition);
+                }
+                else
+                {
+                    if((transform.position - mainEntrancePosition).magnitude < 2)
+                    {
+                        RobotUseMainEntrance();
+                    }
+                    else
+                    {
+                        agent.SetDestination(mainEntrancePosition);
+                    }
+                }
+            }
+            SyncPositionToClients();
 
         }
 
